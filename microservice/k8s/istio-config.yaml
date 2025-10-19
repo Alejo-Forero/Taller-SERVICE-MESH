@@ -1,0 +1,73 @@
+
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: microservices-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: login-microservice
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - microservices-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /login
+      route:
+        - destination:
+            host: login-microservice
+            port:
+              number: 8081
+---
+# VirtualService para User Management Microservice
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: user-management-microservice
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - microservices-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /users
+      route:
+        - destination:
+            host: user-management-microservice
+            port:
+              number: 8082
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: order-management-microservice
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - microservices-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /orders
+      route:
+        - destination:
+            host: order-management-microservice
+            port:
+              number: 8083

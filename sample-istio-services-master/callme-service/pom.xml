@@ -1,0 +1,98 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>pl.piomin.services</groupId>
+        <artifactId>sample-istio-services</artifactId>
+        <version>1.1.0</version>
+    </parent>
+
+    <artifactId>callme-service</artifactId>
+    <version>1.2.1</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>crac</id>
+            <dependencies>
+                <dependency>
+                    <groupId>io.github.crac.org.apache.tomcat.embed</groupId>
+                    <artifactId>tomcat-embed-core</artifactId>
+                    <version>10.1.7</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.apache.tomcat.embed</groupId>
+                            <artifactId>tomcat-embed-core</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>build-image</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <image>
+                                <builder>paketobuildpacks/builder-jammy-base:latest</builder>
+                                <name>piomin/${project.artifactId}:${project.version}</name>
+<!--                                <env>-->
+<!--                                    <BPL_JFR_ENABLED>true</BPL_JFR_ENABLED>-->
+<!--                                    <BPL_JMX_ENABLED>true</BPL_JMX_ENABLED>-->
+<!--                                </env>-->
+                            </image>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>build-image</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

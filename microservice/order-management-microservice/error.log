@@ -1,0 +1,1 @@
+{"code":"ECONNREFUSED","level":"error","message":"Eureka registration failed:","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1116:18)\n    at afterConnectMultiple (node:net:1683:7)"}

@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: login-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: login-microservice
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: login-microservice
+        version: v1
+    spec:
+      containers:
+        - name: login-microservice
+          image: login-microservice:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8081
+          env:
+            - name: DB_HOST
+              value: postgres
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: microservices_db
+            - name: DB_USER
+              value: admin
+            - name: DB_PASSWORD
+              value: admin123
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-management-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-management-microservice
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: user-management-microservice
+        version: v1
+    spec:
+      containers:
+        - name: user-management-microservice
+          image: user-management-microservice:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8082
+          env:
+            - name: DB_HOST
+              value: postgres
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: microservices_db
+            - name: DB_USER
+              value: admin
+            - name: DB_PASSWORD
+              value: admin123
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-management-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-management-microservice
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: order-management-microservice
+        version: v1
+    spec:
+      containers:
+        - name: order-management-microservice
+          image: order-management-microservice:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8083
+          env:
+            - name: MONGO_URI
+              value: mongodb://admin:admin123@mongodb:27017/orders?authSource=admin

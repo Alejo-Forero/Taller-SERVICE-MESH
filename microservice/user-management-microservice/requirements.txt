@@ -1,0 +1,11 @@
+flask==3.0.0
+flask-restful==0.3.10
+flask-cors==4.0.0
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9
+py-eureka-client==0.11.8
+python-dotenv==1.0.0
+marshmallow==3.20.1
+requests==2.31.0
+tenacity==8.2.3
+prometheus-flask-exporter==0.22.4

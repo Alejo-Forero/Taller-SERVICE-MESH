@@ -1,0 +1,38 @@
+apiVersion: skaffold/v4beta5
+kind: Config
+metadata:
+  name: simple-istio-services
+build:
+  artifacts:
+    - image: piomin/first-service
+      jib:
+        project: first-service
+        args:
+          - -Pjib
+          - -DskipTests
+    - image: piomin/caller-service
+      jib:
+        project: caller-service
+        args:
+          - -Pjib
+          - -DskipTests
+    - image: piomin/callme-service
+      jib:
+        project: callme-service
+        args:
+          - -Pjib
+          - -DskipTests
+  tagPolicy:
+    gitCommit: {}
+manifests:
+  rawYaml:
+    - '*/k8s/deployment.yaml'
+deploy:
+  kubectl: {}
+profiles:
+  - name: istio
+    manifests:
+      rawYaml:
+        - k8s/istio-*.yaml
+        - '*/k8s/deployment-versions.yaml'
+        - '*/k8s/istio-*.yaml'
